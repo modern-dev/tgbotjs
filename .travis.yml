@@ -1,0 +1,18 @@
+language: node_js
+node_js:
+  - 13
+os: linux
+install:
+  - npm install
+script:
+  - npm run build
+  - npm run coverage
+  - codecov -f coverage/*.json
+deploy:
+  provider: npm
+  email: bohdan@modern-dev.com
+  api_key:
+    secure: Ihd6K3t1qOy4TaaEJvSh8JiCI8lH2OZvGcZBWk61NxCRChP/LgiibwitByHTAAW8WL7pIidDBBQHryocBEyybl+cj9iRllmjf1g7Wrxd/8VH6XCUzhxBzifo0i1CpSGB2vQAqElXRon2NPfuZbFwwtpIodRGOmp6UZKSXEQ3fWk5hj2KSJkTVYjSQNEyIX44L6CO42ho6sSv+5bMK71YXLRSOUTWKNT+0cPL3J1UOgcI8OJUCXgG063eUZlZFP7t+cVJIlwXts6BlObEiBVcKpqwUe05LWNnuBa2tPTXFlhIenY77kFNgT/ODgmOmPQ7JIjshGjN05FS2vS6bf8BPnSgeSNIc3DwQzOQKV5f9EDqDuhCwSJnVSiRW6KzacjSoxtsyGKlh1DxUdJpGsVK4Mj2Z49w7Xk4lxcWruFLo64JJ0Wjy1/kD/CiDxyAtIFCD/UWrgrHZlE4BcYa0IU+HGZxTbou/KIdpODhomxH3qtmjF7XoiWXL2v2EGAkH7RvCIfPIwuKVuS3n6X+x3+AW6kg0KxUte8EEApFj3Y9LMkPww9dA+va6Z4cZMbZIQS/NP6qFLymGU3nEKkfAvHPubXfRVUBQV1eFIUKb1tCOiH1Ia/371Ovhrcb0mP+EwZ1EL4vw5C8y/IhmQdZnEV57kbmiWFfLmWSjgpslBeknu4=
+  on:
+    tags: true
+    repo: modern-dev/tgbotjs
