@@ -1,0 +1,59 @@
+{
+  "name": "tgbotjs",
+  "version": "0.1.0",
+  "description": "Telegram Bot API for Node.js and browsers.",
+  "main": "lib/cjs/index.js",
+  "module": "lib/es6/index.js",
+  "typings": "lib/cjs/index.d.ts",
+  "types": "lib/cjs/index.d.ts",
+  "scripts": {
+    "build": "npm run build-cjs && npm run build-es6",
+    "build-cjs": "tsc --module commonjs --outdir ./lib/cjs",
+    "build-es6": "tsc --module es6 --outDir ./lib/es6",
+    "lint": "eslint ./*.ts",
+    "mocha": "cross-env TS_NODE_FILES=true mocha --exit -r ts-node/register --colors ./*.spec.ts",
+    "test": "npm run lint && npm run mocha",
+    "pub": "npm run test && npm run build && npm publish --access public",
+    "coverage:unit": "nyc npm run test",
+    "coverage:report": "nyc report --reporter=json > coverage/coverage.json",
+    "coverage": "npm run coverage:unit && npm run coverage:report"
+  },
+  "author": "Bohdan Shtepan <bohdan@modern-dev.com>",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/modern-dev/tgbotjs.git"
+  },
+  "keywords": [
+    "telegram",
+    "bot",
+    "api",
+    "nodejs",
+    "browsers",
+    "chatbot"
+  ],
+  "bugs": {
+    "url": "https://github.com/modern-dev/tgbotjs/issues"
+  },
+  "homepage": "https://github.com/modern-dev/tgbotjs#readme",
+  "dependencies": {
+    "wretch": "^1.7.1"
+  },
+  "devDependencies": {
+    "@types/chai": "^4.2.7",
+    "@types/mocha": "^5.2.7",
+    "@types/node": "^13.7.0",
+    "@typescript-eslint/eslint-plugin": "^2.8.0",
+    "@typescript-eslint/parser": "^2.8.0",
+    "chai": "^4.2.0",
+    "codecov": "^3.6.1",
+    "cross-env": "^6.0.3",
+    "eslint": "^6.6.0",
+    "form-data": "^3.0.0",
+    "mocha": "^7.0.0",
+    "node-fetch": "^2.6.0",
+    "nyc": "^15.0.0",
+    "ts-node": "^8.6.1",
+    "typescript": "^3.7.2"
+  }
+}
