@@ -11,9 +11,11 @@ import {
   ChatId, ChatPermissions,
   ForceReply,
   InlineKeyboardMarkup,
-  InputFile, InputMedia,
+  InputFile,
+  InputMedia,
   InputMediaPhoto,
   InputMediaVideo,
+  MaskPosition,
   ReplyKeyboardMarkup,
   ReplyKeyboardRemove
 } from './types';
@@ -203,4 +205,30 @@ export interface EditMessageReplyMarkupParams {
   messageId?: string;
   inlineMessageId?: string;
   replyMarkup?: InlineKeyboardMarkup;
+}
+
+export interface SendStickerParams {
+  chatId: ChatId;
+  sticker: InputFile | string;
+  disableNotifications?: boolean;
+  replyToMessageId?: number;
+  replyMarkup?: InlineKeyboardMarkup | ReplyKeyboardMarkup | ReplyKeyboardRemove | ForceReply;
+}
+
+export interface CreateNewStickerSetParams {
+  userId: number;
+  name: string;
+  title: string;
+  pngSticker: InputFile | string;
+  emojis: string;
+  containsMasks?: boolean;
+  maskPosition?: MaskPosition
+}
+
+export interface AddStickerToSetParams {
+  userId: number;
+  name: string;
+  pngSticker: InputFile | string;
+  emojis: string;
+  maskPosition?: MaskPosition
 }

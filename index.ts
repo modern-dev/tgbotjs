@@ -20,7 +20,10 @@ import {
   ChatPermissions,
   File,
   UserProfilePhotos,
-  ChatActions, InlineKeyboardMarkup, Poll
+  ChatActions,
+  InlineKeyboardMarkup,
+  Poll,
+  StickerSet
 } from './types';
 
 import {
@@ -46,7 +49,10 @@ import {
   EditMessageTextParams,
   EditMessageCaptionParams,
   EditMessageMediaParams,
-  EditMessageReplyMarkupParams
+  EditMessageReplyMarkupParams,
+  SendStickerParams,
+  CreateNewStickerSetParams,
+  AddStickerToSetParams
 } from './params';
 /* eslint-enable no-unused-vars */
 
@@ -570,6 +576,73 @@ class Bot {
    */
   deleteMessage = (chatId: ChatId, messageId: string): Promise<boolean> =>
     this.rawRequest('deleteMessage', { chatId, messageId });
+
+  /**
+   * Use this method to send static .WEBP or animated .TGS stickers.
+   *
+   * @param params - Object containing method parameters.
+   * @returns On success, the sent Message is returned.
+   */
+  sendSticker = (params: SendStickerParams): Promise<Message> =>
+    this.rawRequest('sendSticker', params);
+
+  /**
+   * Use this method to get a sticker set.
+   *
+   * @param name - Name of the sticker set.
+   * @returns On success, a StickerSet object is returned.
+   */
+  getStickerSet = (name: string): Promise<StickerSet> =>
+    this.rawRequest('getStickerSet', { name });
+
+  /**
+   * Use this method to upload a .png file with a sticker for later use in createNewStickerSet
+   * and addStickerToSet methods (can be used multiple times).
+   *
+   * @param userId - User identifier of sticker file owner.
+   * @param pngSticker - Png image with the sticker, must be up to 512 kilobytes in size,
+   * dimensions must not exceed 512px, and either width or height must be exactly 512px.
+   * @returns Returns the uploaded File on success.
+   */
+  uploadStickerFile = (userId: number, pngSticker: InputFile): Promise<File> =>
+    this.rawRequest('uploadStickerFile', { userId, pngSticker });
+
+  /**
+   * Use this method to create new sticker set owned by a user. The bot will be able to edit the created sticker set.
+   *
+   * @param params - Object containing method parameters.
+   * @returns Returns True on success.
+   */
+  createNewStickerSet = (params: CreateNewStickerSetParams): Promise<boolean> =>
+    this.rawRequest('createNewStickerSet', params);
+
+  /**
+   * Use this method to add a new sticker to a set created by the bot.
+   *
+   * @param params - Object containing method parameters.
+   * @returns Returns True on success.
+   */
+  addStickerToSet = (params: AddStickerToSetParams): Promise<boolean> =>
+    this.rawRequest('addStickerToSet', params);
+
+  /**
+   * Use this method to move a sticker in a set created by the bot to a specific position.
+   *
+   * @param sticker - File identifier of the sticker.
+   * @param position - New sticker position in the set, zero-based.
+   * @returns Returns True on success.
+   */
+  setStickerPositionInSet = (sticker: string, position: number): Promise<boolean> =>
+    this.rawRequest('setStickerPositionInSet', { sticker, position });
+
+  /**
+   * Use this method to delete a sticker from a set created by the bot.
+   *
+   * @param sticker - File identifier of the sticker.
+   * @returns Returns True on success.
+   */
+  deleteStickerFromSet = (sticker: string): Promise<boolean> =>
+    this.rawRequest('deleteStickerFromSet', { sticker });
 
   private rawRequest<T>(method: string, params: ITgBotParams = {}): Promise<T> {
     const url = this.getUrl(method);

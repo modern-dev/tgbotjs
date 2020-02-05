@@ -212,6 +212,14 @@ export type SuccessfulPayment = {
   providerPaymentChargeId: string
 }
 
+export type StickerSet = {
+  name: string;
+  title: string;
+  isAnimated: boolean;
+  containsMasks: boolean;
+  stickers: Array<Sticker>;
+}
+
 export type Sticker = {
   fileId: string
   fileUniqueId: string
