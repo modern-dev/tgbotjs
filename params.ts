@@ -11,7 +11,7 @@ import {
   ChatId, ChatPermissions,
   ForceReply,
   InlineKeyboardMarkup,
-  InputFile,
+  InputFile, InputMedia,
   InputMediaPhoto,
   InputMediaVideo,
   ReplyKeyboardMarkup,
@@ -169,4 +169,38 @@ export interface AnswerCallbackQueryParams {
   showAlert?: boolean;
   url?: string;
   cacheTime?: number;
+}
+
+export interface EditMessageTextParams {
+  chatId?: ChatId;
+  messageId?: string;
+  inlineMessageId?: string;
+  text: string;
+  parseMode?: string;
+  disableWebPagePreview?: boolean;
+  replyMarkup?: InlineKeyboardMarkup;
+}
+
+export interface EditMessageCaptionParams {
+  chatId?: ChatId;
+  messageId?: string;
+  inlineMessageId?: string;
+  caption?: string;
+  parseMode?: string;
+  replyMarkup?: InlineKeyboardMarkup;
+}
+
+export interface EditMessageMediaParams {
+  chatId?: ChatId;
+  messageId?: string;
+  inlineMessageId?: string;
+  media: InputMedia;
+  replyMarkup?: InlineKeyboardMarkup;
+}
+
+export interface EditMessageReplyMarkupParams {
+  chatId?: ChatId;
+  messageId?: string;
+  inlineMessageId?: string;
+  replyMarkup?: InlineKeyboardMarkup;
 }

@@ -20,7 +20,7 @@ import {
   ChatPermissions,
   File,
   UserProfilePhotos,
-  ChatActions
+  ChatActions, InlineKeyboardMarkup, Poll
 } from './types';
 
 import {
@@ -42,7 +42,11 @@ import {
   SendContactParams,
   SendPollParams,
   EditMessageLiveLocationParams,
-  StopMessageLiveLocationParams
+  StopMessageLiveLocationParams,
+  EditMessageTextParams,
+  EditMessageCaptionParams,
+  EditMessageMediaParams,
+  EditMessageReplyMarkupParams
 } from './params';
 /* eslint-enable no-unused-vars */
 
@@ -494,6 +498,78 @@ class Bot {
    */
   answerCallbackQuery = (params: AnswerCallbackQueryParams): Promise<boolean> =>
     this.rawRequest('answerCallbackQuery', params);
+
+  /**
+   * Use this method to edit text and game messages.
+   *
+   * @param params - Object containing method parameters.
+   * @returns On success, if edited message is sent by the bot, the edited Message is returned,
+   * otherwise True is returned.
+   */
+  editMessageText = (params: EditMessageTextParams): Promise<Message | boolean> =>
+    this.rawRequest('editMessageText', params);
+
+  /**
+   * Use this method to edit captions of messages.
+   *
+   * @param params - Object containing method parameters.
+   * @returns On success, if edited message is sent by the bot, the edited Message is returned,
+   * otherwise True is returned.
+   */
+  editMessageCaption = (params: EditMessageCaptionParams): Promise<Message | boolean> =>
+    this.rawRequest('editMessageCaption', params);
+
+  /**
+   * Use this method to edit animation, audio, document, photo, or video messages.
+   * If a message is a part of a message album, then it can be edited only to a photo or a video.
+   * Otherwise, message type can be changed arbitrarily. When inline message is edited, new file can't be uploaded.
+   * Use previously uploaded file via its file_id or specify a URL.
+   *
+   * @param params - Object containing method parameters.
+   * @returns On success, if the edited message was sent by the bot, the edited Message is returned,
+   * otherwise True is returned.
+   */
+  editMessageMedia = (params: EditMessageMediaParams): Promise<Message | boolean> =>
+    this.rawRequest('editMessageMedia', params);
+
+  /**
+   * Use this method to edit only the reply markup of messages.
+   *
+   * @param params - Object containing method parameters.
+   * @returns On success, if edited message is sent by the bot, the edited Message is returned,
+   * otherwise True is returned.
+   */
+  editMessageReplyMarkup = (params: EditMessageReplyMarkupParams): Promise<Message | boolean> =>
+    this.rawRequest('editMessageReplyMarkup', params);
+
+  /**
+   * Use this method to stop a poll which was sent by the bot.
+   *
+   * @param chatId - Unique identifier for the target chat or username of the target channel
+   * (in the format @channelusername).
+   * @param messageId - Identifier of the original message with the poll.
+   * @param replyMarkup - A JSON-serialized object for a new message inline keyboard.
+   * @returns On success, the stopped Poll with the final results is returned.
+   */
+  stopPoll = (chatId: ChatId, messageId: string, replyMarkup?: InlineKeyboardMarkup): Promise<Poll> =>
+    this.rawRequest('stopPoll', { chatId, messageId, replyMarkup });
+
+  /**
+   * Use this method to delete a message, including service messages, with the following limitations:
+   * - A message can only be deleted if it was sent less than 48 hours ago.
+   * - Bots can delete outgoing messages in private chats, groups, and supergroups.
+   * - Bots can delete incoming messages in private chats.
+   * - Bots granted can_post_messages permissions can delete outgoing messages in channels.
+   * - If the bot is an administrator of a group, it can delete any message there.
+   * - If the bot has can_delete_messages permission in a supergroup or a channel, it can delete any message there.
+   *
+   * @param chatId - Unique identifier for the target chat or username of the target channel
+   * (in the format @channelusername).
+   * @param messageId - Identifier of the message to delete.
+   * @returns Returns True on success.
+   */
+  deleteMessage = (chatId: ChatId, messageId: string): Promise<boolean> =>
+    this.rawRequest('deleteMessage', { chatId, messageId });
 
   private rawRequest<T>(method: string, params: ITgBotParams = {}): Promise<T> {
     const url = this.getUrl(method);
