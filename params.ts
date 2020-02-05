@@ -8,9 +8,11 @@
 
 /* eslint-disable no-unused-vars */
 import {
-  ChatId, ChatPermissions,
+  ChatId,
+  ChatPermissions,
   ForceReply,
   InlineKeyboardMarkup,
+  InlineQueryResult,
   InputFile,
   InputMedia,
   InputMediaPhoto,
@@ -231,4 +233,14 @@ export interface AddStickerToSetParams {
   pngSticker: InputFile | string;
   emojis: string;
   maskPosition?: MaskPosition
+}
+
+export interface AnswerInlineQueryParams {
+  inlineQueryId: string;
+  results: Array<InlineQueryResult>;
+  cacheTime?: number;
+  isPersonal?: boolean;
+  nextOffset?: string;
+  switchPmText?: string;
+  switchPmParameter?: string;
 }

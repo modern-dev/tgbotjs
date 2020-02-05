@@ -52,7 +52,8 @@ import {
   EditMessageReplyMarkupParams,
   SendStickerParams,
   CreateNewStickerSetParams,
-  AddStickerToSetParams
+  AddStickerToSetParams,
+  AnswerInlineQueryParams
 } from './params';
 /* eslint-enable no-unused-vars */
 
@@ -643,6 +644,16 @@ class Bot {
    */
   deleteStickerFromSet = (sticker: string): Promise<boolean> =>
     this.rawRequest('deleteStickerFromSet', { sticker });
+
+  /**
+   * Use this method to send answers to an inline query.
+   * No more than 50 results per query are allowed.
+   *
+   * @param params - Object containing method parameters.
+   * @returns On success, True is returned.
+   */
+  answerInlineQuery = (params: AnswerInlineQueryParams): Promise<boolean> =>
+    this.rawRequest('answerInlineQuery', params);
 
   private rawRequest<T>(method: string, params: ITgBotParams = {}): Promise<T> {
     const url = this.getUrl(method);
