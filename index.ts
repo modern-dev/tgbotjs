@@ -23,7 +23,9 @@ import {
   ChatActions,
   InlineKeyboardMarkup,
   Poll,
-  StickerSet
+  StickerSet,
+  WebhookInfo,
+  Update
 } from './types';
 
 import {
@@ -53,7 +55,9 @@ import {
   SendStickerParams,
   CreateNewStickerSetParams,
   AddStickerToSetParams,
-  AnswerInlineQueryParams
+  AnswerInlineQueryParams,
+  SetWebhookParams,
+  GetUpdatesParams
 } from './params';
 /* eslint-enable no-unused-vars */
 
@@ -68,6 +72,54 @@ class Bot {
 
     this.token = token;
   }
+
+  /**
+   * Use this method to receive incoming updates using long polling.
+   *
+   * @param params - Object containing method parameters.
+   * @returns An Array of Update objects is returned.
+   */
+  getUpdates = (params: GetUpdatesParams): Promise<Array<Update>> =>
+    this.rawRequest('getUpdates', params);
+
+  /**
+   * Use this method to specify a url and receive incoming updates via an outgoing webhook.
+   * Whenever there is an update for the bot, we will send an HTTPS POST request to the specified url,
+   * containing a JSON-serialized Update. In case of an unsuccessful request,
+   * we will give up after a reasonable amount of attempts.
+   *
+   * If you'd like to make sure that the Webhook request comes from Telegram, we recommend using a secret path
+   * in the URL, e.g. https://www.example.com/<token>. Since nobody else knows your bot‘s token,
+   * you can be pretty sure it’s us.
+   *
+   * @param params - Object containing method parameters.
+   * @returns Returns True on success.
+   */
+  setWebhook(params: SetWebhookParams): Promise<boolean> {
+    const mName = 'setWebhook';
+
+    if (params && params.certificate) {
+      return this.rawFileRequest(mName, params);
+    }
+
+    return this.rawRequest(mName, params);
+  }
+
+  /**
+   * Use this method to remove webhook integration if you decide to switch back to getUpdates.
+   * @returns Returns True on success.
+   */
+  deleteWebhook = (): Promise<boolean> =>
+    this.rawRequest('deleteWebhook');
+
+  /**
+   * Use this method to get current webhook status. Requires no parameters.
+   *
+   * @returns On success, returns a WebhookInfo object. If the bot is using getUpdates,
+   * will return an object with the url field empty.
+   */
+  getWebhookInfo = (): Promise<WebhookInfo> =>
+    this.rawRequest('getWebhookInfo');
 
   /**
    * A simple method for testing your bot's auth token. Requires no parameters.

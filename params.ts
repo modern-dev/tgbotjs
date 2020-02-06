@@ -244,3 +244,17 @@ export interface AnswerInlineQueryParams {
   switchPmText?: string;
   switchPmParameter?: string;
 }
+
+export interface GetUpdatesParams {
+  offset?: number;
+  limit?: number;
+  timeout?: number;
+  allowedUpdates?: Array<string>;
+}
+
+export interface SetWebhookParams {
+  utl: string;
+  certificate?: InputFile;
+  maxConnections?: number;
+  allowedUpdates?: Array<string>;
+}
