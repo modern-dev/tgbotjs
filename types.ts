@@ -19,7 +19,16 @@ export type ChatId = string | number;
 
 /* eslint-disable no-unused-vars */
 export enum ChatActions {
-
+  Typing = 'typing',
+  UploadPhoto = 'upload_photo',
+  RecordVideo = 'record_video',
+  UploadVideo = 'upload_video',
+  RecordAudio = 'record_audio',
+  UploadAudio = 'upload_audio',
+  UploadDocument = 'upload_document',
+  FindLocation = 'find_location',
+  RecordVideoNote = 'record_video_note',
+  UploadVideoNote = 'upload_video_note'
 }
 /* eslint-enable no-unused-vars */
 

@@ -637,7 +637,7 @@ class Bot {
    * @returns On success, the sent Message is returned.
    */
   sendSticker = (params: SendStickerParams): Promise<Message> =>
-    this.rawRequest('sendSticker', params);
+    this.rawFileRequest('sendSticker', params);
 
   /**
    * Use this method to get a sticker set.
@@ -658,7 +658,7 @@ class Bot {
    * @returns Returns the uploaded File on success.
    */
   uploadStickerFile = (userId: number, pngSticker: InputFile): Promise<File> =>
-    this.rawRequest('uploadStickerFile', { userId, pngSticker });
+    this.rawFileRequest('uploadStickerFile', { userId, pngSticker });
 
   /**
    * Use this method to create new sticker set owned by a user. The bot will be able to edit the created sticker set.
@@ -667,7 +667,7 @@ class Bot {
    * @returns Returns True on success.
    */
   createNewStickerSet = (params: CreateNewStickerSetParams): Promise<boolean> =>
-    this.rawRequest('createNewStickerSet', params);
+    this.rawFileRequest('createNewStickerSet', params);
 
   /**
    * Use this method to add a new sticker to a set created by the bot.
@@ -676,7 +676,7 @@ class Bot {
    * @returns Returns True on success.
    */
   addStickerToSet = (params: AddStickerToSetParams): Promise<boolean> =>
-    this.rawRequest('addStickerToSet', params);
+    this.rawFileRequest('addStickerToSet', params);
 
   /**
    * Use this method to move a sticker in a set created by the bot to a specific position.
