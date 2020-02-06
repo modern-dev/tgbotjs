@@ -19,7 +19,9 @@ import {
   InputMediaVideo,
   MaskPosition,
   ReplyKeyboardMarkup,
-  ReplyKeyboardRemove
+  ReplyKeyboardRemove,
+  ShippingOption,
+  LabeledPrice
 } from './types';
 /* eslint-enable no-unused-vars */
 
@@ -257,4 +259,37 @@ export interface SetWebhookParams {
   certificate?: InputFile;
   maxConnections?: number;
   allowedUpdates?: Array<string>;
+}
+
+export interface SendInvoiceParams {
+  chatId: number;
+  title: string;
+  description: string;
+  payload: string;
+  providerToken: string;
+  startParameter: string;
+  currency: string;
+  prices: Array<LabeledPrice>;
+  providerData?: string;
+  photoUrl?: string;
+  photoSize?: number;
+  photoWidth?: number;
+  photoHeight?: number;
+  needName?: boolean;
+  needPhoneNumber?: boolean;
+  needEmail?: boolean;
+  needShippingAddress?: boolean;
+  sendPhoneNumberToProvider?: boolean;
+  sendEmailToProvider?: boolean;
+  isFlexible?: boolean;
+  disableNotification?: boolean;
+  replyToMessageId?: number;
+  replyMarkup: InlineKeyboardMarkup
+}
+
+export interface AnswerShippingQueryParams {
+  shippingQueryId: string;
+  ok: boolean;
+  shippingOptions?: Array<ShippingOption>;
+  errorMessage?: string;
 }

@@ -57,7 +57,9 @@ import {
   AddStickerToSetParams,
   AnswerInlineQueryParams,
   SetWebhookParams,
-  GetUpdatesParams
+  GetUpdatesParams,
+  SendInvoiceParams,
+  AnswerShippingQueryParams
 } from './params';
 /* eslint-enable no-unused-vars */
 
@@ -706,6 +708,44 @@ class Bot {
    */
   answerInlineQuery = (params: AnswerInlineQueryParams): Promise<boolean> =>
     this.rawRequest('answerInlineQuery', params);
+
+  /**
+   * Use this method to send invoices.
+   *
+   * @param params - Object containing method parameters.
+   * @returns On success, the sent Message is returned.
+   */
+  sendInvoice = (params: SendInvoiceParams): Promise<Message> =>
+    this.rawRequest('sendInvoice', params);
+
+  /**
+   * If you sent an invoice requesting a shipping address and the parameter is_flexible was specified,
+   * the Bot API will send an Update with a shipping_query field to the bot. Use this method to reply
+   * to shipping queries.
+   *
+   * @param params - Object containing method parameters.
+   * @returns On success, True is returned.
+   */
+  answerShippingQuery = (params: AnswerShippingQueryParams): Promise<boolean> =>
+    this.rawRequest('answerShippingQuery', params);
+
+  /**
+   * Once the user has confirmed their payment and shipping details, the Bot API sends the final confirmation
+   * in the form of an Update with the field preCheckoutQuery. Use this method to respond to such pre-checkout queries.
+   *
+   * Note: The Bot API must receive an answer within 10 seconds after the pre-checkout query was sent.
+   *
+   * @param preCheckoutQueryId - Unique identifier for the query to be answered.
+   * @param ok - Specify True if everything is alright (goods are available, etc.) and the bot is ready
+   * to proceed with the order. Use False if there are any problems.
+   * @param errorMessage - Required if ok is False. Error message in human readable form that explains the reason
+   * for failure to proceed with the checkout (e.g. "Sorry, somebody just bought the last of our amazing
+   * black T-shirts while you were busy filling out your payment details. Please choose a different color
+   * or garment!"). Telegram will display this message to the user.
+   * @returns On success, True is returned.
+   */
+  answerPreCheckoutQuery = (preCheckoutQueryId: string, ok: boolean, errorMessage?: string): Promise<boolean> =>
+    this.rawRequest('answerPreCheckoutQuery', { preCheckoutQueryId, ok, errorMessage });
 
   private rawRequest<T>(method: string, params: ITgBotParams = {}): Promise<T> {
     const url = this.getUrl(method);

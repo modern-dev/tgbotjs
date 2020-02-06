@@ -860,3 +860,14 @@ export type InlineQueryResultCachedAudio = {
   replyMarkup: InlineKeyboardMarkup;
   inputMessageContent: InputMessageContent;
 }
+
+export type LabeledPrice = {
+  label: string;
+  amount: number;
+}
+
+export type ShippingOption = {
+  id: string;
+  title: string;
+  prices: Array<LabeledPrice>;
+}
