@@ -293,3 +293,72 @@ export interface AnswerShippingQueryParams {
   shippingOptions?: Array<ShippingOption>;
   errorMessage?: string;
 }
+
+export type PassportElementError = PassportElementErrorDataField | PassportElementErrorFrontSide |
+  PassportElementErrorReverseSide | PassportElementErrorSelfie | PassportElementErrorFile |
+  PassportElementErrorFiles | PassportElementErrorTranslationFile | PassportElementErrorTranslationFiles |
+  PassportElementErrorUnspecified;
+
+export type PassportElementErrorDataField = {
+  source: string;
+  type: string;
+  fieldZName: string;
+  dataHash: string;
+  message: string;
+}
+
+export type PassportElementErrorFrontSide = {
+  source: string;
+  type: string;
+  fileHash: string;
+  message: string;
+}
+
+export type PassportElementErrorReverseSide = {
+  source: string;
+  type: string;
+  fileHash: string;
+  message: string;
+}
+
+export type PassportElementErrorSelfie = {
+  source: string;
+  type: string;
+  fileHash: string;
+  message: string;
+}
+
+export type PassportElementErrorFile = {
+  source: string;
+  type: string;
+  fileHash: string;
+  message: string;
+}
+
+export type PassportElementErrorFiles = {
+  source: string;
+  type: string;
+  fileHashes: Array<string>;
+  message: string;
+}
+
+export type PassportElementErrorTranslationFile = {
+  source: string;
+  type: string;
+  fileHash: string;
+  message: string;
+}
+
+export type PassportElementErrorTranslationFiles = {
+  source: string;
+  type: string;
+  fileHashes: Array<String>;
+  message: string;
+}
+
+export type PassportElementErrorUnspecified = {
+  source: string;
+  type: string;
+  elementHash: string;
+  message: string;
+}

@@ -59,7 +59,8 @@ import {
   SetWebhookParams,
   GetUpdatesParams,
   SendInvoiceParams,
-  AnswerShippingQueryParams
+  AnswerShippingQueryParams,
+  PassportElementError
 } from './params';
 /* eslint-enable no-unused-vars */
 
@@ -746,6 +747,18 @@ class Bot {
    */
   answerPreCheckoutQuery = (preCheckoutQueryId: string, ok: boolean, errorMessage?: string): Promise<boolean> =>
     this.rawRequest('answerPreCheckoutQuery', { preCheckoutQueryId, ok, errorMessage });
+
+  /**
+   * Informs a user that some of the Telegram Passport elements they provided contains errors.
+   * The user will not be able to re-submit their Passport to you until the errors are fixed
+   * (the contents of the field for which you returned the error must change).
+   *
+   * @param userId - User identifier.
+   * @param errors - A JSON-serialized array describing the errors.
+   * @returns Returns True on success.
+   */
+  setPassportDataErrors = (userId: number, errors: Array<PassportElementError>): Promise<boolean> =>
+    this.rawRequest('setPassportDataErrors', { userId, errors });
 
   private rawRequest<T>(method: string, params: ITgBotParams = {}): Promise<T> {
     const url = this.getUrl(method);
