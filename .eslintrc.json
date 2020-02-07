@@ -19,6 +19,7 @@
   "plugins": [
     "@typescript-eslint"
   ],
+  "ignorePatterns": ["*.js"],
   "rules": {
     "indent": [
       "error",
