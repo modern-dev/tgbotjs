@@ -6,7 +6,7 @@ install:
   - npm install
 script:
   - npm run build
-  - npm run coverage
+  - npm run test
   - codecov -f coverage/*.json
 deploy:
   provider: npm
