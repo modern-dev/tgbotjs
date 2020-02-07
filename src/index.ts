@@ -7,7 +7,7 @@
  */
 
 import wretch from 'wretch';
-import { isObject, camelCased, snakeCased } from './utils';
+import { isObject, isString, camelCased, snakeCased } from './utils';
 /* eslint-disable no-unused-vars */
 import {
   APIResponse,
@@ -64,13 +64,14 @@ import {
   AnswerShippingQueryParams,
   SendGameParams,
   SetGameScoreParams,
-  GetGameHighScoresParams
+  GetGameHighScoresParams,
+  ForwardMessageParams
 } from './params';
 /* eslint-enable no-unused-vars */
 
 class Bot {
-  private readonly token: string;
-  private readonly apiUrlBase = 'https://api.telegram.org/bot';
+  protected readonly token: string;
+  protected apiUrlBase = 'https://api.telegram.org/bot';
 
   constructor(token: string) {
     if (!token) {
@@ -102,15 +103,8 @@ class Bot {
    * @param params - Object containing method parameters.
    * @returns Returns True on success.
    */
-  setWebhook(params: SetWebhookParams): Promise<boolean> {
-    const mName = 'setWebhook';
-
-    if (params && params.certificate) {
-      return this.rawFileRequest(mName, params);
-    }
-
-    return this.rawRequest(mName, params);
-  }
+  setWebhook = (params: SetWebhookParams): Promise<boolean> =>
+    this.sendReq('setWebhook', params, ['certificate']);
 
   /**
    * Use this method to remove webhook integration if you decide to switch back to getUpdates.
@@ -146,13 +140,22 @@ class Bot {
     this.rawRequest<Message>('sendMessage', params);
 
   /**
+   * Use this method to forward messages of any kind.
+   *
+   * @param params - Object containing method parameters.
+   * @returns On success, the sent Message is returned.
+   */
+  forwardMessage = (params: ForwardMessageParams): Promise<Message> =>
+    this.rawRequest('forwardMessage', params);
+
+  /**
    * Use this method to send photos.
    *
    * @param params - Object containing method parameters.
    * @returns On success, the sent Message is returned.
    */
   sendPhoto = (params: SendPhotoParams): Promise<Message> =>
-    this.rawFileRequest('sendPhoto', params);
+    this.sendReq('sendPhoto', params, ['photo']);
 
   /**
    * Use this method to send audio files, if you want Telegram clients to display them in the music player.
@@ -163,7 +166,7 @@ class Bot {
    * this limit may be changed in the future.
    */
   sendAudio = (params: SendAudioParams): Promise<Message> =>
-    this.rawFileRequest('sendAudio', params);
+    this.sendReq('sendAudio', params, ['audio', 'thumb']);
 
   /**
    * Use this method to send general files.
@@ -173,7 +176,7 @@ class Bot {
    * of up to 50 MB in size, this limit may be changed in the future.
    */
   sendDocument = (params: SendDocumentParams): Promise<Message> =>
-    this.rawFileRequest('sendDocument', params);
+    this.sendReq('sendDocument', params, ['document', 'thumb']);
 
   /**
    * Use this method to send video files, Telegram clients support mp4 videos (other formats may be sent as Document).
@@ -183,7 +186,7 @@ class Bot {
    * this limit may be changed in the future.
    */
   sendVideo = (params: SendVideoParams): Promise<Message> =>
-    this.rawFileRequest('sendVideo', params);
+    this.sendReq('sendVideo', params, ['video', 'thumb']);
 
   /**
    * Use this method to send animation files (GIF or H.264/MPEG-4 AVC video without sound).
@@ -193,7 +196,7 @@ class Bot {
    * this limit may be changed in the future.
    */
   sendAnimation = (params: SendAnimationParams): Promise<Message> =>
-    this.rawFileRequest('sendAnimation', params);
+    this.sendReq('sendAnimation', params, ['animation', 'thumb']);
 
   /**
    * Use this method to send audio files, if you want Telegram clients to display the file as a playable voice message.
@@ -205,7 +208,7 @@ class Bot {
    * this limit may be changed in the future.
    */
   sendVoice = (params: SendVoiceParams): Promise<Message> =>
-    this.rawFileRequest('sendVoice', params);
+    this.sendReq('sendVoice', params, ['voice']);
 
   /**
    * As of v.4.0, Telegram clients support rounded square mp4 videos of up to 1 minute long.
@@ -215,7 +218,7 @@ class Bot {
    * @returns On success, the sent Message is returned.
    */
   sendVideoNote = (params: SendVideoNoteParams): Promise<Message> =>
-    this.rawFileRequest('sendVideoNote', params);
+    this.sendReq('sendVideoNote', params, ['video_note', 'thumb']);
 
   /**
    * Use this method to send a group of photos or videos as an album.
@@ -233,7 +236,7 @@ class Bot {
    * @returns On success, the sent Message is returned.
    */
   sendLocation = (params: SendLocationParams): Promise<Message> =>
-    this.rawFileRequest('sendLocation', params);
+    this.rawRequest('sendLocation', params);
 
   /**
    * Use this method to edit live location messages. A location can be edited until its livePeriod expires
@@ -244,7 +247,7 @@ class Bot {
    * otherwise True is returned.
    */
   editMessageLiveLocation = (params: EditMessageLiveLocationParams): Promise<Message | boolean> =>
-    this.rawFileRequest('editMessageLiveLocation', params);
+    this.rawRequest('editMessageLiveLocation', params);
 
   /**
    * Use this method to stop updating a live location message before live_period expires.
@@ -253,7 +256,7 @@ class Bot {
    * @returns On success, if the message was sent by the bot, the sent Message is returned, otherwise True is returned.
    */
   stopMessageLiveLocation = (params: StopMessageLiveLocationParams): Promise<Message | boolean> =>
-    this.rawFileRequest('stopMessageLiveLocation', params);
+    this.rawRequest('stopMessageLiveLocation', params);
 
   /**
    * Use this method to send information about a venue.
@@ -262,7 +265,7 @@ class Bot {
    * @returns On success, the sent Message is returned.
    */
   sendVenue = (params: SendVenueParams): Promise<Message> =>
-    this.rawFileRequest('sendVenue', params);
+    this.rawRequest('sendVenue', params);
 
   /**
    * Use this method to send phone contacts.Use this method to send phone contacts.
@@ -271,7 +274,7 @@ class Bot {
    * @returns On success, the sent Message is returned.
    */
   sendContact = (params: SendContactParams): Promise<Message> =>
-    this.rawFileRequest('sendContact', params);
+    this.rawRequest('sendContact', params);
 
   /**
    * Use this method to send a native poll.
@@ -280,7 +283,7 @@ class Bot {
    * @returns On success, the sent Message is returned.
    */
   sendPoll = (params: SendPollParams): Promise<Message> =>
-    this.rawFileRequest('sendPoll', params);
+    this.rawRequest('sendPoll', params);
 
   /**
    * Use this method when you need to tell the user that something is happening on the bot's side.
@@ -414,7 +417,7 @@ class Bot {
    * @returns Returns True on success.
    */
   setChatPhoto = (chatId: ChatId, photo: InputFile): Promise<boolean> =>
-    this.rawFileRequest('setChatPhoto', { chatId, photo });
+    this.sendReq('setChatPhoto', { chatId, photo }, ['photo']);
 
   /**
    * Use this method to delete a chat photo. Photos can't be changed for private chats.
@@ -665,7 +668,7 @@ class Bot {
    * @returns Returns the uploaded File on success.
    */
   uploadStickerFile = (userId: number, pngSticker: InputFile): Promise<File> =>
-    this.rawFileRequest('uploadStickerFile', { userId, pngSticker });
+    this.sendReq('uploadStickerFile', { userId, png_sticker: pngSticker }, ['png_sticker']);
 
   /**
    * Use this method to create new sticker set owned by a user. The bot will be able to edit the created sticker set.
@@ -674,7 +677,7 @@ class Bot {
    * @returns Returns True on success.
    */
   createNewStickerSet = (params: CreateNewStickerSetParams): Promise<boolean> =>
-    this.rawFileRequest('createNewStickerSet', params);
+    this.sendReq('createNewStickerSet', params, ['png_sticker']);
 
   /**
    * Use this method to add a new sticker to a set created by the bot.
@@ -683,7 +686,7 @@ class Bot {
    * @returns Returns True on success.
    */
   addStickerToSet = (params: AddStickerToSetParams): Promise<boolean> =>
-    this.rawFileRequest('addStickerToSet', params);
+    this.sendReq('addStickerToSet', params, ['png_sticker']);
 
   /**
    * Use this method to move a sticker in a set created by the bot to a specific position.
@@ -793,6 +796,10 @@ class Bot {
   getGameHighScores = (params: GetGameHighScoresParams): Promise<Array<GameHighScore>> =>
     this.rawRequest('getGameHighScores', params);
 
+  private sendReq = <T>(method: string, params: ITgBotParams = {}, fileKeys?: Array<string>): Promise<T> =>
+    !fileKeys && this.hasFileString(params, ...fileKeys || []) ?
+      this.rawRequest(method, params) : this.rawFileRequest(method, params);
+
   private rawRequest<T>(method: string, params: ITgBotParams = {}): Promise<T> {
     const url = this.getUrl(method);
 
@@ -828,7 +835,7 @@ class Bot {
     return `${this.apiUrlBase}${this.token}/${method}`;
   }
 
-  private transformObject(obj: { [key: string]: any }): void {
+  protected transformObject(obj: { [key: string]: any }): void {
     if (!isObject(obj)) {
       return;
     }
@@ -854,12 +861,13 @@ class Bot {
     });
   }
 
-  private transformParams(params: ITgBotParams = {}) {
+  protected transformParams(params: ITgBotParams = {}) {
     if (!isObject(params)) {
-      return {};
+      return;
     }
 
-    const skipKeys = ['photo', 'audio', 'document', 'video', 'animation', 'voice', 'video_note'];
+    const skipKeys = ['photo', 'audio', 'document', 'video', 'animation', 'voice', 'video_note', 'png_sticker',
+      'thumb', 'media'];
 
     Object.keys(params).forEach((key) => {
       const snakeCasedKey = snakeCased(key);
@@ -883,6 +891,10 @@ class Bot {
         this.transformParams(params[snakeCasedKey]);
       }
     });
+  }
+
+  protected hasFileString(obj: { [key: string]: any }, ...keys: Array<string>): boolean {
+    return keys.every((key) => obj && obj[key] && isString(obj[key]) || false);
   }
 }
 

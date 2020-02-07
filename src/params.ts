@@ -42,6 +42,13 @@ export interface SendMessageParams extends BaseSendParams {
   disableWebPagePreview?: boolean;
 }
 
+export interface ForwardMessageParams {
+  chatId: ChatId;
+  from_ChatId: ChatId;
+  disableNotification?: boolean;
+  messageId: number;
+}
+
 export interface SendPhotoParams extends BaseSendParams {
   photo: InputFile;
   caption?: string;
@@ -223,7 +230,7 @@ export interface CreateNewStickerSetParams {
   userId: number;
   name: string;
   title: string;
-  pngSticker: InputFile | string;
+  png_sticker: InputFile | string;
   emojis: string;
   containsMasks?: boolean;
   maskPosition?: MaskPosition
@@ -232,7 +239,7 @@ export interface CreateNewStickerSetParams {
 export interface AddStickerToSetParams {
   userId: number;
   name: string;
-  pngSticker: InputFile | string;
+  png_sticker: InputFile | string;
   emojis: string;
   maskPosition?: MaskPosition
 }

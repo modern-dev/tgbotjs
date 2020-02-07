@@ -7,6 +7,7 @@
  */
 
 const isObject = (obj: any): boolean => Object.prototype.toString.call(obj) === '[object Object]';
+const isString = (obj: any): boolean => Object.prototype.toString.call(obj) === '[object String]';
 const snakeCased = (str: string): string =>
   str.replace(/([A-Z])/g, (g) => `_${g.toLocaleLowerCase()}`);
 const camelCased = (str: string): string =>
@@ -14,6 +15,7 @@ const camelCased = (str: string): string =>
 
 export {
   isObject,
+  isString,
   snakeCased,
   camelCased
 };
