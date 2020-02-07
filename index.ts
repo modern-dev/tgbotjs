@@ -25,7 +25,9 @@ import {
   Poll,
   StickerSet,
   WebhookInfo,
-  Update
+  Update,
+  PassportElementError,
+  GameHighScore
 } from './types';
 
 import {
@@ -60,7 +62,9 @@ import {
   GetUpdatesParams,
   SendInvoiceParams,
   AnswerShippingQueryParams,
-  PassportElementError
+  SendGameParams,
+  SetGameScoreParams,
+  GetGameHighScoresParams
 } from './params';
 /* eslint-enable no-unused-vars */
 
@@ -759,6 +763,35 @@ class Bot {
    */
   setPassportDataErrors = (userId: number, errors: Array<PassportElementError>): Promise<boolean> =>
     this.rawRequest('setPassportDataErrors', { userId, errors });
+
+  /**
+   * Use this method to send a game.
+   *
+   * @param params - Object containing method parameters.
+   * @returns On success, the sent Message is returned.
+   */
+  sendGame = (params: SendGameParams): Promise<Message> =>
+    this.rawRequest('sendGame', params);
+
+  /**
+   * Use this method to set the score of the specified user in a game.
+   *
+   * @param params - Object containing method parameters.
+   * @returns On success, if the message was sent by the bot, returns the edited Message, otherwise returns True.
+   * Returns an error, if the new score is not greater than the user's current score in the chat and force is False.
+   */
+  setGameScore = (params: SetGameScoreParams): Promise<Message | boolean> =>
+    this.rawRequest('setGameScore', params);
+
+  /**
+   * Use this method to get data for high score tables. Will return the score of the specified user and several
+   * of his neighbors in a game.
+   *
+   * @param params - Object containing method parameters.
+   * @returns On success, returns an Array of GameHighScore objects.
+   */
+  getGameHighScores = (params: GetGameHighScoresParams): Promise<Array<GameHighScore>> =>
+    this.rawRequest('getGameHighScores', params);
 
   private rawRequest<T>(method: string, params: ITgBotParams = {}): Promise<T> {
     const url = this.getUrl(method);
