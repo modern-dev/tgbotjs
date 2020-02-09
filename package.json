@@ -1,5 +1,5 @@
 {
-  "name": "tgbotjs",
+  "name": "@modern-dev/tgbotjs",
   "version": "0.1.0",
   "description": "Telegram Bot API for Node.js and browsers.",
   "main": "lib/cjs/index.js",
